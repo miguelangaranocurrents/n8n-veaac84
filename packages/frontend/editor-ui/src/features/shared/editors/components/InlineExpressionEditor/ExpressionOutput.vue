@@ -87,12 +87,12 @@ const resolvedSegments = computed<Resolved[]>(() => {
 	return props.segments
 		.map((segment) => {
 			segment.from = cursor;
+			// Measure the same text that `resolvedExpression` renders, so falsy values such
+			// as `0` or `false` still advance the cursor.
 			cursor +=
 				segment.kind === 'plaintext'
 					? segment.plaintext.length
-					: segment.resolved
-						? (segment.resolved as string | number | boolean).toString().length
-						: 0;
+					: String(segment.resolved).length;
 			segment.to = cursor;
 			return segment;
 		})
